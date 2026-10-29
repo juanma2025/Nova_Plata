@@ -44,6 +44,17 @@ if (env.NODE_ENV === 'production') {
 const uploadsPath = path.resolve(process.cwd(), 'uploads');
 app.use('/uploads', express.static(uploadsPath));
 
+// ─── Healthcheck & Root Route ───────────────────────
+app.get(['/api/health', '/health', '/api', '/'], (_req, res) => {
+  res.json({
+    success: true,
+    message: '🚀 Nova Plata Backend API is running',
+    timestamp: new Date().toISOString(),
+    environment: env.NODE_ENV,
+    version: '1.0.0',
+  });
+});
+
 // ─── API Routes ─────────────────────────────────────
 app.use('/api/v1', routes);
 app.use('/v1', routes);
