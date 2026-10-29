@@ -46,12 +46,14 @@ app.use('/uploads', express.static(uploadsPath));
 
 // ─── Healthcheck & Root Route ───────────────────────
 app.get(['/api/health', '/health', '/api', '/'], (_req, res) => {
+  const isSupabaseConfigured = !env.SUPABASE_URL.includes('demo');
   res.json({
     success: true,
     message: '🚀 Nova Plata Backend API is running',
     timestamp: new Date().toISOString(),
     environment: env.NODE_ENV,
     version: '1.0.0',
+    supabaseConnected: isSupabaseConfigured,
   });
 });
 

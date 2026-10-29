@@ -16,6 +16,10 @@ import { createClient } from '@supabase/supabase-js';
 
 // ─── Registration ───────────────────────────────────
 export async function register(input: RegisterInput) {
+  if (env.SUPABASE_URL.includes('demo')) {
+    throw new Error('Configuración incompleta: Faltan las variables SUPABASE_URL y SUPABASE_ANON_KEY en Vercel.');
+  }
+
   const { data, error } = await supabasePublic.auth.signUp({
     email: input.email,
     password: input.password,
@@ -50,6 +54,10 @@ export async function register(input: RegisterInput) {
 
 // ─── Login ──────────────────────────────────────────
 export async function login(input: LoginInput) {
+  if (env.SUPABASE_URL.includes('demo')) {
+    throw new Error('Configuración incompleta: Faltan las variables SUPABASE_URL y SUPABASE_ANON_KEY en Vercel.');
+  }
+
   const { data, error } = await supabasePublic.auth.signInWithPassword({
     email: input.email,
     password: input.password,
@@ -330,8 +338,12 @@ export async function mfaGetAssuranceLevel(accessToken: string) {
 
 // ─── Error Mapping ──────────────────────────────────
 function mapAuthError(message: string): string {
+  if (message.includes('fetch failed') || message.includes('ENOTFOUND')) {
+    return 'No se pudo conectar con Supabase. Verifica la variable SUPABASE_URL en Vercel.';
+  }
+
   const errorMap: Record<string, string> = {
-    'Invalid login credentials': 'Credenciales inválidas',
+    'Invalid login credentials': 'Credenciales inválidas. Verifica tu correo y contraseña.',
     'Email not confirmed': 'Debes confirmar tu correo electrónico',
     'User already registered': 'Este correo ya está registrado',
     'Password should be at least 6 characters': 'La contraseña debe tener al menos 8 caracteres',
@@ -344,5 +356,5 @@ function mapAuthError(message: string): string {
     if (message.includes(key)) return value;
   }
 
-  return 'Error de autenticación. Intenta de nuevo';
+  return `Error de autenticación: ${message}`;
 }
