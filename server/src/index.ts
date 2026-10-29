@@ -46,6 +46,7 @@ app.use('/uploads', express.static(uploadsPath));
 
 // ─── API Routes ─────────────────────────────────────
 app.use('/api/v1', routes);
+app.use('/v1', routes);
 
 // ─── 404 Handler ────────────────────────────────────
 app.use(notFoundHandler);
@@ -54,7 +55,7 @@ app.use(notFoundHandler);
 app.use(errorHandler);
 
 // ─── Start Server (Only for local dev or traditional hosting) ───
-if (process.env.NODE_ENV !== 'production' || process.env.IS_LOCAL) {
+if (!process.env.VERCEL && (process.env.NODE_ENV !== 'production' || process.env.IS_LOCAL)) {
   app.listen(env.PORT, () => {
     logger.info(`🚀 Nova Plata Server running`, {
       port: env.PORT,
