@@ -110,40 +110,72 @@ export async function forgotPassword(input: ForgotPasswordInput) {
 
 // ─── Reset Password ────────────────────────────────
 export async function resetPassword(input: ResetPasswordInput & { email?: string }, accessToken?: string) {
+  let targetUserId: string | undefined;
+  let targetEmail: string | undefined = input.email;
+
+  // 1. Try to get user from token via Supabase Admin
   if (accessToken && accessToken !== 'demo-token') {
-    const userClient = createClient(env.SUPABASE_URL, env.SUPABASE_ANON_KEY, {
-      global: { headers: { Authorization: `Bearer ${accessToken}` } },
-    });
+    try {
+      const { data, error } = await supabaseAdmin.auth.getUser(accessToken);
+      if (!error && data?.user) {
+        targetUserId = data.user.id;
+        if (!targetEmail) targetEmail = data.user.email;
+      }
+    } catch (tokenErr) {
+      logger.warn('Auth: Failed to get user from token', { error: (tokenErr as Error).message });
+    }
 
-    const { error } = await userClient.auth.updateUser({
-      password: input.password,
-    });
-
-    if (!error) {
-      logger.info('Auth: Password reset successful via token');
-      return;
+    // 2. Fallback: Parse JWT payload directly if getUser didn't succeed
+    if (!targetUserId) {
+      try {
+        const parts = accessToken.split('.');
+        if (parts.length === 3) {
+          const payload = JSON.parse(Buffer.from(parts[1], 'base64').toString('utf-8'));
+          if (payload.sub) targetUserId = payload.sub;
+          if (payload.email && !targetEmail) targetEmail = payload.email;
+        }
+      } catch {
+        // ignore decode error
+      }
     }
   }
 
-  // Admin fallback via email lookup
-  if (input.email) {
+  // 3. If we have the target user ID, update password directly with Admin API
+  if (targetUserId) {
+    const { error: updateErr } = await supabaseAdmin.auth.admin.updateUserById(targetUserId, {
+      password: input.password,
+    });
+
+    if (updateErr) {
+      logger.error('Auth: Password update by ID failed', { userId: targetUserId, error: updateErr.message });
+      throw new Error('Error al actualizar contraseña: ' + updateErr.message);
+    }
+
+    logger.info('Auth: Password reset successful via token user ID', { userId: targetUserId, email: targetEmail });
+    return;
+  }
+
+  // 4. Admin fallback via email lookup
+  if (targetEmail) {
     const { data, error: listErr } = await supabaseAdmin.auth.admin.listUsers();
-    if (!listErr && data.users) {
-      const targetUser = data.users.find(u => u.email?.toLowerCase() === input.email?.toLowerCase());
+    if (!listErr && data?.users) {
+      const targetUser = data.users.find(u => u.email?.toLowerCase() === targetEmail!.toLowerCase());
       if (targetUser) {
         const { error: updateErr } = await supabaseAdmin.auth.admin.updateUserById(targetUser.id, {
           password: input.password,
         });
         if (updateErr) {
+          logger.error('Auth: Password update by email failed', { email: targetEmail, error: updateErr.message });
           throw new Error('Error al actualizar contraseña: ' + updateErr.message);
         }
-        logger.info('Auth: Password reset successful via admin for', { email: input.email });
+        logger.info('Auth: Password reset successful via admin email lookup', { email: targetEmail });
         return;
       }
     }
   }
 
-  throw new Error('No se pudo verificar el token o usuario para restablecer la contraseña');
+  logger.warn('Auth: Password reset failed - no valid user or token', { hasToken: !!accessToken, email: input.email });
+  throw new Error('No se pudo verificar el usuario o el token para restablecer la contraseña');
 }
 
 // ─── Refresh Token ──────────────────────────────────

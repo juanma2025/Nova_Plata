@@ -1,6 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
+import path from 'path';
 import { env } from './config/env.js';
 import { corsOptions } from './config/cors.js';
 import { generalLimiter } from './middlewares/rateLimiter.middleware.js';
@@ -28,8 +29,8 @@ app.use(helmet({
 app.use(cors(corsOptions));
 
 // ─── Body Parsing ───────────────────────────────────
-app.use(express.json({ limit: '10kb' }));  // Prevent large payload attacks
-app.use(express.urlencoded({ extended: false, limit: '10kb' }));
+app.use(express.json({ limit: '10mb' }));
+app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
 // ─── General Rate Limiting ──────────────────────────
 app.use(generalLimiter);
@@ -38,6 +39,10 @@ app.use(generalLimiter);
 if (env.NODE_ENV === 'production') {
   app.set('trust proxy', 1);
 }
+
+// ─── Static Uploads ─────────────────────────────────
+const uploadsPath = path.resolve(process.cwd(), 'uploads');
+app.use('/uploads', express.static(uploadsPath));
 
 // ─── API Routes ─────────────────────────────────────
 app.use('/api/v1', routes);

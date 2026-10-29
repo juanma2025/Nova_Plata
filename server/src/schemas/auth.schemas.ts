@@ -4,11 +4,8 @@ import { z } from 'zod';
 const email = z.string().email('Correo electrónico inválido').max(255).trim().toLowerCase();
 const password = z
   .string()
-  .min(8, 'La contraseña debe tener al menos 8 caracteres')
-  .max(128, 'La contraseña no debe superar 128 caracteres')
-  .regex(/[A-Z]/, 'Debe contener al menos una mayúscula')
-  .regex(/[a-z]/, 'Debe contener al menos una minúscula')
-  .regex(/[0-9]/, 'Debe contener al menos un número');
+  .min(6, 'La contraseña debe tener al menos 6 caracteres')
+  .max(128, 'La contraseña no debe superar 128 caracteres');
 
 // ─── Register ───────────────────────────────────────
 export const registerSchema = z.object({

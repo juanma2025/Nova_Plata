@@ -62,7 +62,8 @@ export async function resetPassword(req: Request, res: Response) {
     const authService = await getAuthService();
     const authReq = req as AuthenticatedRequest;
     const token = authReq.accessToken || req.body.token || req.headers.authorization?.replace(/^Bearer\s+/i, '');
-    await authService.resetPassword(req.body, token);
+    const email = req.body.email || authReq.user?.email;
+    await authService.resetPassword({ ...req.body, email }, token);
     sendSuccess(res, null, 'Contraseña restablecida exitosamente');
   } catch (err) {
     sendError(res, (err as Error).message);

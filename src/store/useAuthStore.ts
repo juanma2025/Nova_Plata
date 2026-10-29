@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import type { User } from '../types';
+import { useStore } from './useStore';
 
 interface AuthState {
   user: User | null;
@@ -19,8 +20,23 @@ export const useAuthStore = create<AuthState>()(
       isAuthenticated: false,
       theme: 'dark',
       setTheme: (theme) => set({ theme }),
-      login: (user) => set({ user, isAuthenticated: true }),
-      logout: () => set({ user: null, isAuthenticated: false }),
+      login: (user) => {
+        useStore.getState().clearAllData();
+        set({ user, isAuthenticated: true });
+        useStore.getState().fetchFinancialData();
+      },
+      logout: () => {
+        try {
+          localStorage.removeItem('access_token');
+          localStorage.removeItem('nova-plata-finances');
+          localStorage.removeItem('mi-plata-auth');
+          sessionStorage.clear();
+        } catch {
+          // ignore
+        }
+        useStore.getState().clearAllData();
+        set({ user: null, isAuthenticated: false });
+      },
       updateUser: (updates) => set((state) => ({ user: state.user ? { ...state.user, ...updates } : null })),
     }),
     { name: 'mi-plata-auth' }

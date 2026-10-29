@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Card } from '../components/ui/Card';
 import { useAuthStore } from '../store/useAuthStore';
@@ -33,23 +33,60 @@ export function Profile() {
   const [activeTab, setActiveTab] = useState<'personal' | 'accounts' | 'ai' | 'notifications'>('personal');
   const [isSaving, setIsSaving] = useState(false);
 
-  // Form State initialized from user or defaults
+  // Form State initialized from user
   const [formData, setFormData] = useState({
-    name: user?.name || 'Mateo Silva Restrepo',
-    email: user?.email || 'mateo.silva@platafinance.io',
-    phone: user?.phone || '310 845 9210',
+    name: user?.name || '',
+    email: user?.email || '',
+    phone: user?.phone || '',
     phone_prefix: user?.phone_prefix || '+57',
-    document_id: user?.document_id || 'CC 1.020.482.910',
-    occupation: user?.occupation || 'Senior Financial Engineer & Angel Investor',
+    document_id: user?.document_id || '',
+    occupation: user?.occupation || '',
     avatar_url: user?.avatar_url || '',
     currency: user?.currency || 'COP - Peso Colombiano',
-    tax_regime: user?.tax_regime || 'Persona Natural - Declarante',
-    anomaly_alert_threshold: user?.anomaly_alert_threshold || 2000000,
+    tax_regime: user?.tax_regime || 'Persona Natural - No Declarante',
+    anomaly_alert_threshold: user?.anomaly_alert_threshold ?? 2000000,
     ai_copilot_proactive: user?.ai_copilot_proactive ?? true,
     ai_weekly_audit: user?.ai_weekly_audit ?? true,
     ai_subscription_detection: user?.ai_subscription_detection ?? true,
     ai_risk_profile: (user?.ai_risk_profile || 'Moderado') as 'Conservador' | 'Moderado' | 'Agresivo',
   });
+
+  // Fetch real profile from backend on mount
+  useEffect(() => {
+    let isMounted = true;
+    async function loadProfile() {
+      try {
+        const res = await authService.get('/user/profile');
+        if (res.success && res.data && isMounted) {
+          const p = res.data;
+          updateUser(p);
+          setFormData({
+            name: p.name || '',
+            email: p.email || '',
+            phone: p.phone || '',
+            phone_prefix: p.phone_prefix || '+57',
+            document_id: p.document_id || '',
+            occupation: p.occupation || '',
+            avatar_url: p.avatar_url || '',
+            currency: p.currency || 'COP - Peso Colombiano',
+            tax_regime: p.tax_regime || 'Persona Natural - No Declarante',
+            anomaly_alert_threshold: p.anomaly_alert_threshold ?? 2000000,
+            ai_copilot_proactive: p.ai_copilot_proactive ?? true,
+            ai_weekly_audit: p.ai_weekly_audit ?? true,
+            ai_subscription_detection: p.ai_subscription_detection ?? true,
+            ai_risk_profile: (p.ai_risk_profile || 'Moderado') as 'Conservador' | 'Moderado' | 'Agresivo',
+          });
+          if (p.sessions && p.sessions.length > 0) {
+            setSessions(p.sessions);
+          }
+        }
+      } catch {
+        // keep local state if offline
+      }
+    }
+    loadProfile();
+    return () => { isMounted = false; };
+  }, []);
 
   // Active Sessions State
   const [sessions, setSessions] = useState<ActiveSession[]>(user?.sessions || [
@@ -139,38 +176,23 @@ export function Profile() {
       };
 
       // Call backend API
-      await authService.patch('/user/profile', payload);
+      const res = await authService.patch('/user/profile', payload);
 
-      // Compute initials
-      const newInitials = (formData.name.split(' ').map(n => n[0]).join('').substring(0, 2)).toUpperCase() || 'MS';
-
-      // Update Zustand Auth Store (persisted to localStorage)
-      updateUser({ ...payload, initials: newInitials });
+      if (res && res.data) {
+        updateUser(res.data);
+      } else {
+        const newInitials = (formData.name.split(' ').filter(Boolean).map(n => n[0]).join('').substring(0, 2)).toUpperCase() || 'NP';
+        updateUser({ ...payload, initials: newInitials });
+      }
 
       toast.success('Cambios guardados con éxito', {
-        description: 'Tu perfil y parámetros del motor algorítmico han sido actualizados.',
+        description: 'Tu perfil y configuración han sido persistidos correctamente.',
       });
-    } catch {
-      // Offline / fallback save
-      const newInitials = (formData.name.split(' ').map(n => n[0]).join('').substring(0, 2)).toUpperCase() || 'MS';
-      updateUser({
-        name: formData.name.trim(),
-        avatar_url: formData.avatar_url,
-        phone: formData.phone.trim(),
-        phone_prefix: formData.phone_prefix,
-        document_id: formData.document_id.trim(),
-        occupation: formData.occupation.trim(),
-        currency: formData.currency,
-        tax_regime: formData.tax_regime,
-        anomaly_alert_threshold: Number(formData.anomaly_alert_threshold) || 2000000,
-        ai_copilot_proactive: formData.ai_copilot_proactive,
-        ai_weekly_audit: formData.ai_weekly_audit,
-        ai_subscription_detection: formData.ai_subscription_detection,
-        ai_risk_profile: formData.ai_risk_profile,
-        sessions: sessions,
-        initials: newInitials,
+    } catch (err: any) {
+      console.error('Error al guardar perfil:', err);
+      toast.error('Error al guardar cambios', {
+        description: err.message || 'No se pudo guardar la información en el servidor.',
       });
-      toast.success('Perfil actualizado localmente');
     } finally {
       setIsSaving(false);
     }
@@ -179,15 +201,15 @@ export function Profile() {
   // Discard changes
   const handleDiscard = () => {
     setFormData({
-      name: user?.name || 'Mateo Silva Restrepo',
-      email: user?.email || 'mateo.silva@platafinance.io',
-      phone: user?.phone || '310 845 9210',
+      name: user?.name || '',
+      email: user?.email || '',
+      phone: user?.phone || '',
       phone_prefix: user?.phone_prefix || '+57',
-      document_id: user?.document_id || 'CC 1.020.482.910',
-      occupation: user?.occupation || 'Senior Financial Engineer & Angel Investor',
+      document_id: user?.document_id || '',
+      occupation: user?.occupation || '',
       avatar_url: user?.avatar_url || '',
       currency: user?.currency || 'COP - Peso Colombiano',
-      tax_regime: user?.tax_regime || 'Persona Natural - Declarante',
+      tax_regime: user?.tax_regime || 'Persona Natural - No Declarante',
       anomaly_alert_threshold: user?.anomaly_alert_threshold || 2000000,
       ai_copilot_proactive: user?.ai_copilot_proactive ?? true,
       ai_weekly_audit: user?.ai_weekly_audit ?? true,
@@ -325,7 +347,7 @@ export function Profile() {
                   />
                 ) : (
                   <div className="w-full h-full bg-gradient-to-br from-[#1E1F24] via-[#2A181C] to-[#121316] flex items-center justify-center text-3xl font-headline font-bold text-[#FF334F]">
-                    {formData.name.substring(0, 2).toUpperCase()}
+                    {(formData.name?.trim().substring(0, 2) || user?.email?.substring(0, 2) || 'NP').toUpperCase()}
                   </div>
                 )}
                 {/* Hover overlay */}

@@ -5,11 +5,13 @@ import { Moon, Sun } from 'lucide-react';
 import { Logo } from '../ui/Logo';
 
 export function PublicNavbar() {
-  const { theme, setTheme, isAuthenticated } = useAuthStore();
+  const { theme, setTheme, isAuthenticated, logout } = useAuthStore();
 
   const toggleTheme = () => {
     setTheme(theme === 'dark' ? 'light' : 'dark');
   };
+
+  const hasValidSession = Boolean(isAuthenticated && localStorage.getItem('access_token'));
 
   return (
     <header className='sticky top-0 z-50 w-full border-b border-[var(--border)] bg-[var(--bg)]/80 backdrop-blur-md'>
@@ -36,8 +38,13 @@ export function PublicNavbar() {
               <Moon size={18} className="text-[#B83A43] transition-transform hover:-rotate-12" />
             )}
           </button>
-          {isAuthenticated ? (
-            <Link to='/app'><Button variant="primary" neon={true}>Ir a mi panel</Button></Link>
+          {hasValidSession ? (
+            <div className="flex items-center gap-2">
+              <Link to='/login' onClick={() => logout()}>
+                <Button variant='ghost'>Iniciar sesión</Button>
+              </Link>
+              <Link to='/app'><Button variant="primary" neon={true}>Ir a mi panel</Button></Link>
+            </div>
           ) : (
             <>
               <Link to='/login'><Button variant='ghost'>Iniciar sesión</Button></Link>

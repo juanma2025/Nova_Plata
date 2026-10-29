@@ -5,7 +5,8 @@ import { useAuthStore } from '../store/useAuthStore';
 import { motion } from 'framer-motion';
 
 export function Landing() {
-  const { isAuthenticated } = useAuthStore();
+  const { isAuthenticated, logout } = useAuthStore();
+  const hasValidSession = Boolean(isAuthenticated && localStorage.getItem('access_token'));
 
   return (
     <div className="flex flex-col min-h-[calc(100vh-4rem)] font-sans">
@@ -40,10 +41,15 @@ export function Landing() {
           transition={{ type: "spring", stiffness: 400, damping: 12, delay: 0.3 }}
           className="flex flex-col sm:flex-row gap-4 z-10"
         >
-          {isAuthenticated ? (
-            <Link to="/app">
-              <Button variant="primary" neon={true} className="h-12 px-8 text-base font-semibold w-full sm:w-auto">Ir a mi panel <ArrowRight className="ml-2" size={18} /></Button>
-            </Link>
+          {hasValidSession ? (
+            <div className="flex flex-col sm:flex-row gap-4">
+              <Link to="/app">
+                <Button variant="primary" neon={true} className="h-12 px-8 text-base font-semibold w-full sm:w-auto">Ir a mi panel <ArrowRight className="ml-2" size={18} /></Button>
+              </Link>
+              <Link to="/login" onClick={() => logout()}>
+                <Button variant="secondary" className="h-12 px-8 text-base font-semibold w-full sm:w-auto">Iniciar sesión</Button>
+              </Link>
+            </div>
           ) : (
             <>
               <Link to="/register">

@@ -1,10 +1,18 @@
 import { Outlet, Navigate } from 'react-router-dom';
+import { useEffect } from 'react';
 import { Sidebar } from '../components/Sidebar';
 import { Topbar } from '../components/Topbar';
 import { useAuthStore } from '../store/useAuthStore';
+import { useStore } from '../store/useStore';
 
 export function AppLayout() {
   const { isAuthenticated, user } = useAuthStore();
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      useStore.getState().fetchFinancialData();
+    }
+  }, [isAuthenticated, user?.id]);
 
   if (!isAuthenticated) {
     return <Navigate to="/login" replace />;

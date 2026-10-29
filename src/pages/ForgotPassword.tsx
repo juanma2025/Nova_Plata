@@ -5,6 +5,7 @@ import { Input } from '../components/ui/Input';
 import { toast } from 'sonner';
 import { authService } from '../services/api';
 import { ArrowLeft, CheckCircle2, KeyRound } from 'lucide-react';
+import { useAuthStore } from '../store/useAuthStore';
 
 export function ForgotPassword() {
   const [email, setEmail] = useState('');
@@ -65,12 +66,20 @@ export function ForgotPassword() {
             </Button>
           </form>
 
-          <div className="mt-8 text-center">
+          <div className="mt-8 text-center flex flex-col gap-3 items-center">
             <Link 
               to="/login" 
+              onClick={() => useAuthStore.getState().logout()}
               className="inline-flex items-center gap-2 text-sm text-[var(--muted)] hover:text-[var(--text)] font-medium transition-colors"
             >
               <ArrowLeft size={16} /> Volver a iniciar sesión
+            </Link>
+            <Link 
+              to="/" 
+              onClick={() => useAuthStore.getState().logout()}
+              className="inline-flex items-center gap-2 text-xs text-[var(--muted)] hover:text-[var(--text)] transition-colors opacity-75"
+            >
+              Volver a la página principal
             </Link>
           </div>
         </>

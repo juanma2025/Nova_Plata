@@ -44,6 +44,15 @@ function AppRoot() {
     }
   }, [theme]);
 
+  // Session validation: If there is no valid access_token, reset authentication state
+  useEffect(() => {
+    const token = localStorage.getItem('access_token');
+    const { isAuthenticated, logout } = useAuthStore.getState();
+    if (!token && isAuthenticated) {
+      logout();
+    }
+  }, []);
+
   return (
     <BrowserRouter>
       <Routes>

@@ -5,6 +5,7 @@ import { Input } from '../components/ui/Input';
 import { toast } from 'sonner';
 import { authService } from '../services/api';
 import { Lock, ArrowLeft, ShieldCheck, Eye, EyeOff } from 'lucide-react';
+import { useAuthStore } from '../store/useAuthStore';
 
 export function ResetPassword() {
   const [searchParams] = useSearchParams();
@@ -19,6 +20,9 @@ export function ResetPassword() {
   const [isSuccess, setIsSuccess] = useState(false);
 
   useEffect(() => {
+    // Clear any stale login session when in password recovery mode
+    useAuthStore.getState().logout();
+
     // 1. Check query parameters
     const emailParam = searchParams.get('email');
     if (emailParam) setEmail(emailParam);
@@ -33,13 +37,29 @@ export function ResetPassword() {
       const accessToken = params.get('access_token');
       if (accessToken) {
         setToken(accessToken);
-        localStorage.setItem('access_token', accessToken);
+        try {
+          const parts = accessToken.split('.');
+          if (parts.length === 3) {
+            const base64 = parts[1].replace(/-/g, '+').replace(/_/g, '/');
+            const decoded = JSON.parse(decodeURIComponent(escape(atob(base64))));
+            if (decoded.email) {
+              setEmail(decoded.email);
+            }
+          }
+        } catch {
+          // ignore
+        }
       }
     }
   }, [searchParams]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!email) {
+      toast.error('Por favor, ingresa el correo de tu cuenta');
+      return;
+    }
 
     if (!password || !confirmPassword) {
       toast.error('Por favor, completa todos los campos');
@@ -51,8 +71,8 @@ export function ResetPassword() {
       return;
     }
 
-    if (password.length < 8) {
-      toast.error('La contraseña debe tener al menos 8 caracteres');
+    if (password.length < 6) {
+      toast.error('La contraseña debe tener al menos 6 caracteres');
       return;
     }
 
@@ -71,6 +91,7 @@ export function ResetPassword() {
       const response = await authService.post('/auth/reset-password', payload, { headers });
 
       if (response.success) {
+        localStorage.removeItem('access_token');
         setIsSuccess(true);
         toast.success('¡Contraseña restablecida con éxito!', {
           description: 'Ya puedes iniciar sesión con tu nueva contraseña.',
@@ -99,17 +120,17 @@ export function ResetPassword() {
           </p>
 
           <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-            {email && (
-              <div>
-                <label className="text-xs text-[var(--muted)] font-medium mb-1 block">Cuenta asociada</label>
-                <input 
-                  type="email" 
-                  value={email}
-                  disabled
-                  className="input-field w-full opacity-75 bg-[var(--panel2)] font-mono text-xs"
-                />
-              </div>
-            )}
+            <div>
+              <label className="text-xs text-[var(--muted)] font-medium mb-1 block">Correo de tu cuenta</label>
+              <input 
+                type="email" 
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="tu@correo.com"
+                required
+                className="input-field w-full bg-[var(--panel2)] font-mono text-xs"
+              />
+            </div>
 
             <div>
               <div className="relative">
@@ -130,7 +151,7 @@ export function ResetPassword() {
                 </button>
               </div>
               <p className="text-[11px] text-[var(--muted)] mt-1.5 ml-1">
-                Mínimo 8 caracteres (al menos 1 mayúscula, 1 minúscula y 1 número).
+                Mínimo 6 caracteres.
               </p>
             </div>
 
@@ -150,12 +171,20 @@ export function ResetPassword() {
             </Button>
           </form>
 
-          <div className="mt-8 text-center">
+          <div className="mt-8 text-center flex flex-col gap-3 items-center">
             <Link 
               to="/login" 
+              onClick={() => useAuthStore.getState().logout()}
               className="inline-flex items-center gap-2 text-sm text-[var(--muted)] hover:text-[var(--text)] font-medium transition-colors"
             >
               <ArrowLeft size={16} /> Cancelar y volver al inicio de sesión
+            </Link>
+            <Link 
+              to="/" 
+              onClick={() => useAuthStore.getState().logout()}
+              className="inline-flex items-center gap-2 text-xs text-[var(--muted)] hover:text-[var(--text)] transition-colors opacity-75"
+            >
+              Volver a la página principal
             </Link>
           </div>
         </>
