@@ -159,7 +159,7 @@ export async function resetPassword(input: ResetPasswordInput & { email?: string
   if (targetEmail) {
     const { data, error: listErr } = await supabaseAdmin.auth.admin.listUsers();
     if (!listErr && data?.users) {
-      const targetUser = data.users.find(u => u.email?.toLowerCase() === targetEmail!.toLowerCase());
+      const targetUser = (data.users as any[]).find((u: any) => u.email?.toLowerCase() === targetEmail!.toLowerCase());
       if (targetUser) {
         const { error: updateErr } = await supabaseAdmin.auth.admin.updateUserById(targetUser.id, {
           password: input.password,
