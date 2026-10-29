@@ -29,7 +29,7 @@ export async function getProfile(user: User, accessToken: string) {
     onboarding_completed: data?.onboarding_completed || false,
 
     created_at: data?.created_at || user.created_at,
-    updated_at: data?.updated_at || user.updated_at ?? user.created_at,
+    updated_at: (data?.updated_at || user.updated_at) ?? user.created_at,
   };
 }
 

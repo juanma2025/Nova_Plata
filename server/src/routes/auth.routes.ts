@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import * as authController from '../controllers/auth.controller.js';
 import { validate } from '../middlewares/validate.middleware.js';
-import { requireAuth } from '../middlewares/auth.middleware.js';
+import { requireAuth, optionalAuth } from '../middlewares/auth.middleware.js';
 import { authLimiter } from '../middlewares/rateLimiter.middleware.js';
 import {
   registerSchema,
@@ -21,11 +21,11 @@ const router = Router();
 router.post('/register', authLimiter, validate(registerSchema), authController.register);
 router.post('/login', authLimiter, validate(loginSchema), authController.login);
 router.post('/forgot-password', authLimiter, validate(forgotPasswordSchema), authController.forgotPassword);
+router.post('/reset-password', optionalAuth, validate(resetPasswordSchema), authController.resetPassword);
 router.post('/refresh', authLimiter, validate(refreshTokenSchema), authController.refreshToken);
 
 // ─── Protected Auth Routes ──────────────────────────
 router.post('/logout', requireAuth, authController.logout);
-router.post('/reset-password', requireAuth, validate(resetPasswordSchema), authController.resetPassword);
 
 // ─── MFA Routes (all protected) ─────────────────────
 router.post('/mfa/enroll', requireAuth, validate(mfaEnrollSchema), authController.mfaEnroll);

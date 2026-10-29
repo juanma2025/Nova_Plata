@@ -51,7 +51,7 @@ app.use(errorHandler);
 // ─── Start Server (Only for local dev or traditional hosting) ───
 if (process.env.NODE_ENV !== 'production' || process.env.IS_LOCAL) {
   app.listen(env.PORT, () => {
-    logger.info(`🚀 MiPlata Server running`, {
+    logger.info(`🚀 Nova Plata Server running`, {
       port: env.PORT,
       environment: env.NODE_ENV,
       cors: env.CORS_ORIGIN,

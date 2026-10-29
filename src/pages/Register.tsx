@@ -54,9 +54,9 @@ export function Register() {
   };
 
   return (
-    <div>
-      <h2 className="text-3xl font-bold mb-2">Crear cuenta</h2>
-      <p className="text-[var(--muted)] mb-8">Únete a MiPlata y toma el control de tus finanzas.</p>
+    <div className="font-sans">
+      <h2 className="font-headline text-3xl font-bold mb-2 text-[var(--text)]">Crear cuenta</h2>
+      <p className="text-[var(--muted)] mb-8">Únete a Nova Plata y toma el control de tus finanzas.</p>
 
       <form onSubmit={handleSubmit} className="flex flex-col gap-5">
         <Input
@@ -72,21 +72,26 @@ export function Register() {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
-        <Input
-          label="Contraseña"
-          type="password"
-          placeholder="••••••••"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
+        <div>
+          <Input
+            label="Contraseña"
+            type="password"
+            placeholder="••••••••"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          <p className="text-xs text-[var(--muted)] mt-1.5 ml-1">
+            Mínimo 8 caracteres (al menos 1 mayúscula, 1 minúscula y 1 número).
+          </p>
+        </div>
 
-        <Button type="submit" className="w-full mt-4" isLoading={isLoading}>
+        <Button type="submit" variant="primary" neon={true} className="w-full mt-4" isLoading={isLoading}>
           Crear cuenta
         </Button>
       </form>
 
       <p className="mt-8 text-center text-sm text-[var(--muted)]">
-        ¿Ya tienes una cuenta? <Link to="/login" className="text-[var(--green)] font-medium hover:underline">Inicia sesión</Link>
+        ¿Ya tienes una cuenta? <Link to="/login" className="text-[#B83A43] dark:text-[#FFB8BE] hover:text-[#FF334F] font-medium hover:underline">Inicia sesión</Link>
       </p>
     </div>
   );

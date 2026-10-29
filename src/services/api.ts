@@ -22,7 +22,7 @@ async function fetchWithAuth(endpoint: string, options: RequestInit = {}) {
 }
 
 export const authService = {
-  get: (endpoint: string) => fetchWithAuth(endpoint),
-  post: (endpoint: string, body: any) => fetchWithAuth(endpoint, { method: 'POST', body: JSON.stringify(body) }),
-  patch: (endpoint: string, body: any) => fetchWithAuth(endpoint, { method: 'PATCH', body: JSON.stringify(body) }),
+  get: (endpoint: string, options: RequestInit = {}) => fetchWithAuth(endpoint, options),
+  post: (endpoint: string, body: any, options: RequestInit = {}) => fetchWithAuth(endpoint, { method: 'POST', body: JSON.stringify(body), ...options }),
+  patch: (endpoint: string, body: any, options: RequestInit = {}) => fetchWithAuth(endpoint, { method: 'PATCH', body: JSON.stringify(body), ...options }),
 };

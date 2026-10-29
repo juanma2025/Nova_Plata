@@ -5,31 +5,10 @@ import type {
   CreateGoalInput, UpdateGoalInput
 } from '../schemas/finance.schemas.js';
 
-// In-memory data stores for demo mode
+// In-memory data stores for demo mode (starts clean for user to populate)
 const transactions: any[] = [];
 const budgets: any[] = [];
 const goals: any[] = [];
-
-// Seed some initial data
-transactions.push({
-  id: randomUUID(), user_id: '00000000-0000-0000-0000-000000000001',
-  name: 'Salario', amount: 5000000, type: 'income', category: 'Ingresos',
-  date: new Date().toISOString().split('T')[0], notes: 'Quincena',
-  created_at: new Date().toISOString()
-});
-
-budgets.push({
-  id: randomUUID(), user_id: '00000000-0000-0000-0000-000000000001',
-  category: 'Alimentación', limit_amount: 800000, spent_amount: 350000,
-  month: new Date().toISOString().substring(0, 7),
-  created_at: new Date().toISOString()
-});
-
-goals.push({
-  id: randomUUID(), user_id: '00000000-0000-0000-0000-000000000001',
-  name: 'Viaje a San Andrés', target_amount: 2500000, saved_amount: 500000,
-  deadline: '2027-12-31', created_at: new Date().toISOString()
-});
 
 // ─── TRANSACTIONS ───────────────────────────────────
 

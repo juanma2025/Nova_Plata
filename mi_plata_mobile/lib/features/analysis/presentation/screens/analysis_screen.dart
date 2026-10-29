@@ -142,7 +142,7 @@ class AnalysisScreen extends ConsumerWidget {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text('Insight de Plata IA', style: TextStyle(color: AppColors.accent, fontWeight: FontWeight.bold, fontSize: 14)),
+                              Text('Insight de Nova IA', style: TextStyle(color: AppColors.accent, fontWeight: FontWeight.bold, fontSize: 14)),
                               SizedBox(height: 8),
                               Text(
                                 'Estás gastando el 45% de tus ingresos en Comida. Si reduces tus domicilios a 2 veces por semana, podrías ahorrar un estimado de \$150.000 COP a final de mes.',

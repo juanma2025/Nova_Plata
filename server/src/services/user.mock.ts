@@ -20,7 +20,7 @@ export async function getProfile(user: { id: string; email?: string; user_metada
 
   const profile = {
     id: user.id,
-    email: user.email ?? 'demo@miplata.com',
+    email: user.email ?? 'demo@novaplata.com',
     name: (user.user_metadata?.name as string) ?? 'Usuario Demo',
     avatar_url: null,
     monthly_income: 0,
@@ -42,8 +42,8 @@ export async function updateProfile(userId: string, input: any, accessToken?: st
   const profile = await getProfile({ id: userId });
 
   if (input.full_name !== undefined) profile.name = input.full_name;
-  if (input.avatar_url !== undefined) profile.avatar_url = input.avatar_url;
-  profile.updated_at = new Date().toISOString();
+  if (input.name !== undefined) profile.name = input.name;
+  Object.assign(profile, input, { updated_at: new Date().toISOString() });
 
   profiles.set(userId, profile);
   logger.info('Mock User: Profile updated', { userId });

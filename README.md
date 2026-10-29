@@ -1,21 +1,17 @@
-# Taller No 2: MiPlata - Plataforma Financiera y Asistente de IA
+# Taller No 2: Nova Plata - Plataforma Financiera y Asistente de IA
 
-Este documento contiene la documentación completa del proyecto **MiPlata**, desarrollado como entrega para la asignatura **Contexto de la Ing. de Software**.
+Este documento contiene la documentación completa del proyecto **Nova Plata**, desarrollado como entrega para la asignatura **Contexto de la Ing. de Software**.
 
 ---
 
 ## 1. Datos del Estudiante
-
-- **Nombre Completo:Maria Alejandra Velasquez 
-- **Semestre:primer semestre 
-- **Asignatura:Contexto de la Ingeniería de Software
-- **Proyecto:** MiPlata (Aplicación Web Financiera)
+- **Proyecto:** Nova Plata (Aplicación Web Financiera)
 
 ---
 
 ## 2. Enlaces de Revisión
 
-- **Página Web Desplegada (Vercel):** [PEGA AQUÍ EL LINK DE TU PROYECTO EN VERCEL, ej: https://mi-plata.vercel.app]
+- **Página Web Desplegada (Vercel):** [PEGA AQUÍ EL LINK DE TU PROYECTO EN VERCEL, ej: https://nova-plata.vercel.app]
 - **Repositorio de GitHub:** [PEGA AQUÍ EL LINK DE TU REPOSITORIO DE GITHUB]
 
 > **Nota:** La aplicación cuenta con un entorno de Frontend interactivo y un Backend funcional conectado a Supabase para la autenticación y persistencia de datos.
@@ -24,7 +20,7 @@ Este documento contiene la documentación completa del proyecto **MiPlata**, des
 
 ## 3. Rutina de Despliegue de la Página Web
 
-El despliegue de **MiPlata** está automatizado utilizando **Vercel** para el Frontend y está conectado a un Backend en Node.js y a una base de datos PostgreSQL alojada en **Supabase**.
+El despliegue de **Nova Plata** está automatizado utilizando **Vercel** para el Frontend y está conectado a un Backend en Node.js y a una base de datos PostgreSQL alojada en **Supabase**.
 
 ### Pasos para realizar el despliegue:
 
@@ -53,7 +49,7 @@ El despliegue de **MiPlata** está automatizado utilizando **Vercel** para el Fr
 4. **Despliegue en Vercel (Producción):**
    - Subir el código a un repositorio en **GitHub**.
    - Entrar a [Vercel](https://vercel.com) y seleccionar "Add New Project".
-   - Importar el repositorio de GitHub de `MiPlata`.
+   - Importar el repositorio de GitHub de `Nova Plata`.
    - Vercel detectará automáticamente que es un proyecto **Vite / React**.
    - Comando de Build por defecto que utiliza Vercel: `tsc -b && vite build`.
    - Directorio de salida (Output directory): `dist`.
@@ -79,12 +75,12 @@ A continuación, se documenta la evolución cronológica de las peticiones (prom
 1. *"revisa bien el proyecto por que me dejaste errores en varios archivos"*
 2. *"perfectp me gusta ahora es momento de agregarle interactividad en botones animacienes y demas ya que mas adelante vamos a implementar un backend y mnecesito que el front este lo mas completo posible no quiero errores de colores ni de textos ni errores de sintaxis"*
 3. *"revisa bein por que aun hay errores"*
-4. *"Perfecto. Ahora vamos a evolucionar el proyecto de **MiPlata**. A partir de este punto, **NO quiero que la aplicación siga dependiendo estructuralmente del HTML proporcionado anteriormente**. El HTML anterior debe utilizarse únicamente como **referencia visual y conceptual** para conservar la identidad de MiPlata, pero quiero construir ahora un frontend real, modular, escalable y profesional. OBJETIVO PRINCIPAL: Construye **MiPlata como una aplicación web financiera responsive completa**, utilizando React + TypeScript + Vite + Tailwind CSS. La página principal será un **Dashboard público**... Las funcionalidades que requieran una cuenta deberán estar protegidas mediante autenticación."*
+4. *"Perfecto. Ahora vamos a evolucionar el proyecto de **Nova Plata**. A partir de este punto, **NO quiero que la aplicación siga dependiendo estructuralmente del HTML proporcionado anteriormente**. El HTML anterior debe utilizarse únicamente como **referencia visual y conceptual** para conservar la identidad de Nova Plata, pero quiero construir ahora un frontend real, modular, escalable y profesional. OBJETIVO PRINCIPAL: Construye **Nova Plata como una aplicación web financiera responsive completa**, utilizando React + TypeScript + Vite + Tailwind CSS. La página principal será un **Dashboard público**... Las funcionalidades que requieran una cuenta deberán estar protegidas mediante autenticación."*
 5. *"perfecto agregemos un footer con y demosle mas animacion al dashboard principal animaciones tipo apple y corrige los errores de app.tsx"*
 6. *"arregla el modo dark y ligth no esta funcionando correctamente"*
 7. *"demosle una animación tipo apple a esta parte"*
 8. *"quita la funcion de ese icono de desktop esta interfirinedo con la accion del modo claro y oscuro es decir toca dar 3 clic para cambiar a modo claro y eso no es amigable con el usuario solo es necesario un clic y ya admeas las animaciones anteriores no se notan mucho la idea es que uses ne las animaciones tipo Animojis para que se mas amigable con el usuartio"*
-9. *"Ahora vamos a desarrollar el backend de MiPlata. Utiliza Node.js + TypeScript + Express y Supabase como base de datos y sistema de autenticación. Objetivo: Implementar un backend seguro y escalable que permita: Registro, Login, 2FA, Protección de rutas, API para movimientos... Chat de asistencia mediante Google Gemini. Seguridad — prioridad máxima."*
+9. *"Ahora vamos a desarrollar el backend de Nova Plata. Utiliza Node.js + TypeScript + Express y Supabase como base de datos y sistema de autenticación. Objetivo: Implementar un backend seguro y escalable que permita: Registro, Login, 2FA, Protección de rutas, API para movimientos... Chat de asistencia mediante Google Gemini. Seguridad — prioridad máxima."*
 10. *"ejecuata el proyecto y testealo"*
 11. *"continua y configura la base de detos"*
 12. *"haz todo lo anterior tu mismo"*
@@ -108,7 +104,7 @@ Para garantizar escalabilidad, buenas prácticas de ingeniería de software y un
 - **Validación de Datos:** Uso de **Zod** para parsear, validar y sanitizar estrictamente todo el input recibido desde el cliente (Prevención de inyecciones).
 - **Seguridad Backend:** Implementación de encabezados seguros mediante **Helmet**, configuración estricta de **CORS**, y límite de peticiones (Rate Limiting) para prevenir ataques de fuerza bruta.
 - **Base de Datos y Autenticación:** **Supabase** (PostgreSQL). Implementación de autenticación con doble factor (MFA/2FA) y reglas de Seguridad a Nivel de Fila (RLS) impuestas directamente sobre el motor de la base de datos SQL.
-- **IA y NLP:** Integración de la API de **Google Gemini** como asistente virtual (PLATA IA), con prompts de sistema fuertemente tipados que evitan que la IA filtre datos o altere la base de datos maliciosamente.
+- **IA y NLP:** Integración de la API de **Google Gemini** como asistente virtual (Nova IA), con prompts de sistema fuertemente tipados que evitan que la IA filtre datos o altere la base de datos maliciosamente.
 
 ### Patrones y Principios de Ingeniería Aplicados
 - **Modularidad:** Separación de componentes visuales (`ui/`), componentes de páginas (`pages/`), lógica de estado (`store/`) y utilidades en el frontend. En el backend se implementó un patrón Controlador-Servicio-Ruta.

@@ -10,9 +10,9 @@ import { authService } from '../../services/api';
 const STEPS = [
   {
     id: 'welcome',
-    title: '¡Bienvenido a MiPlata!',
+    title: '¡Bienvenido a Nova Plata!',
     subtitle: 'Para personalizar tu experiencia, necesitamos conocer un poco sobre tus finanzas.',
-    icon: <Logo size="lg" />,
+    icon: <Logo size="lg" withText={false} />,
   },
   {
     id: 'income',
@@ -132,12 +132,12 @@ export function Onboarding() {
           {STEPS.map((_, i) => (
             <div 
               key={i} 
-              className={`h-1 flex-1 rounded-full transition-colors duration-300 ${i <= currentStep ? 'bg-[var(--primary)]' : 'bg-[var(--panel)]'}`} 
+              className={`h-1.5 flex-1 rounded-full transition-colors duration-300 ${i <= currentStep ? 'bg-[#FF334F]' : 'bg-[var(--track)]'}`} 
             />
           ))}
         </div>
 
-        <div className="bg-[var(--panel)] border border-[var(--border)] rounded-2xl p-8 shadow-xl relative overflow-hidden min-h-[450px] flex flex-col">
+        <div className="bg-[var(--panel)] border border-[var(--border)] rounded-2xl p-8 shadow-2xl relative overflow-hidden min-h-[450px] flex flex-col font-sans transition-colors duration-300">
           <AnimatePresence mode="wait">
             <motion.div
               key={currentStep}
@@ -148,11 +148,11 @@ export function Onboarding() {
               className="flex-1 flex flex-col"
             >
               <div className="flex flex-col items-center text-center mb-8">
-                <div className="mb-4 p-4 bg-[var(--panel2)] rounded-full">
+                <div className="mb-4 p-4 bg-[var(--panel2)] border border-[var(--border)] rounded-full">
                   {STEPS[currentStep].icon}
                 </div>
-                <h1 className="text-2xl font-bold mb-2 text-[var(--text)]">{STEPS[currentStep].title}</h1>
-                <p className="text-[var(--muted)]">{STEPS[currentStep].subtitle}</p>
+                <h1 className="font-headline text-2xl font-bold mb-2 text-[var(--text)]">{STEPS[currentStep].title}</h1>
+                <p className="text-[var(--muted)] text-sm">{STEPS[currentStep].subtitle}</p>
               </div>
 
               <div className="flex-1 overflow-y-auto no-scrollbar">

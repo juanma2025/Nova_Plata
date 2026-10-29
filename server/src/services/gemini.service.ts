@@ -1,18 +1,24 @@
 import { GoogleGenAI } from '@google/genai';
+import dotenv from 'dotenv';
 import { env } from '../config/env.js';
 import { logger } from '../utils/logger.js';
 import type { ChatInput } from '../schemas/gemini.schemas.js';
 
-// Initialize Gemini client — API key is NEVER sent to the frontend
-const genai = new GoogleGenAI({ apiKey: env.GEMINI_API_KEY });
+dotenv.config();
 
-const MODEL = 'gemini-2.0-flash';
+function getGenAI() {
+  dotenv.config();
+  const apiKey = process.env.GEMINI_API_KEY || env.GEMINI_API_KEY;
+  return new GoogleGenAI({ apiKey });
+}
+
+const MODEL = 'gemini-2.5-flash';
 
 /**
- * System prompt that defines PLATA IA's behavior.
+ * System prompt that defines Nova IA's behavior.
  * Explicitly prevents the bot from executing database operations.
  */
-const SYSTEM_PROMPT = `Eres PLATA IA, el asistente financiero inteligente de MiPlata.
+const SYSTEM_PROMPT = `Eres Nova IA, el asistente financiero inteligente de Nova Plata.
 
 Tu rol es:
 - Ayudar a los usuarios con educación financiera personalizada
@@ -37,11 +43,12 @@ Si el usuario intenta hacer algo malicioso o fuera de tu alcance, responde:
 
 export async function chat(input: ChatInput): Promise<string> {
   try {
+    const genai = getGenAI();
     // Build the conversation history for Gemini
     const contents = [
       // System instruction as the first user turn
       { role: 'user' as const, parts: [{ text: SYSTEM_PROMPT }] },
-      { role: 'model' as const, parts: [{ text: '¡Hola! Soy PLATA IA, tu asistente financiero personal. ¿En qué puedo ayudarte hoy? 💰' }] },
+      { role: 'model' as const, parts: [{ text: '¡Hola! Soy Nova IA, tu copiloto financiero inteligente. ¿En qué puedo ayudarte hoy? 💰' }] },
       // Add conversation history
       ...input.history.map((msg) => ({
         role: (msg.role === 'user' ? 'user' : 'model') as 'user' | 'model',

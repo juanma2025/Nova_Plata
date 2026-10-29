@@ -52,7 +52,7 @@ export function Transactions() {
       <Card>
         <CardHeader className="flex-col md:flex-row gap-4 items-start md:items-center">
           <CardTitle>Movimientos</CardTitle>
-          <button className="btn-primary flex items-center gap-2 w-full md:w-auto justify-center" onClick={() => setIsModalOpen(true)}>
+          <button className="btn-primary neon-btn flex items-center gap-2 w-full md:w-auto justify-center" onClick={() => setIsModalOpen(true)}>
             <Plus size={18} /> Agregar movimiento
           </button>
         </CardHeader>
@@ -98,11 +98,11 @@ export function Transactions() {
                 <tr key={tx.id} className="hover:bg-[var(--panel2)] transition-colors">
                   <td className="p-[15px_10px] border-b border-[var(--border)] text-[13px]">{tx.name}</td>
                   <td className="p-[15px_10px] border-b border-[var(--border)] text-[13px]">{tx.category}</td>
-                  <td className="p-[15px_10px] border-b border-[var(--border)] text-[13px]">{tx.date}</td>
-                  <td className={`p-[15px_10px] border-b border-[var(--border)] text-[13px] ${tx.type === 'income' ? 'text-[var(--green)]' : 'text-[var(--red)]'}`}>
+                  <td className="p-[15px_10px] border-b border-[var(--border)] text-[13px] text-[var(--muted)]">{tx.date}</td>
+                  <td className={`p-[15px_10px] border-b border-[var(--border)] text-[13px] font-medium ${tx.type === 'income' ? 'text-emerald-400' : 'text-[#FF334F]'}`}>
                     {tx.type === 'income' ? 'Ingreso' : 'Gasto'}
                   </td>
-                  <td className={`p-[15px_10px] border-b border-[var(--border)] text-[13px] font-semibold ${tx.type === 'income' ? 'text-[var(--green)]' : 'text-[var(--red)]'}`}>
+                  <td className={`p-[15px_10px] border-b border-[var(--border)] text-[13px] font-headline font-bold ${tx.type === 'income' ? 'text-emerald-400' : 'text-[#FF334F]'}`}>
                     {tx.type === 'income' ? '+' : '-'}{formatMoney(tx.amount)}
                   </td>
                 </tr>
@@ -119,15 +119,15 @@ export function Transactions() {
 
       {/* Modal */}
       {isModalOpen && (
-        <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-5 animate-in fade-in duration-300">
-          <Card className="w-full max-w-[480px] shadow-2xl relative animate-in zoom-in-95 duration-300">
+        <div className="fixed inset-0 bg-black/75 backdrop-blur-sm flex items-center justify-center z-50 p-5 animate-in fade-in duration-300">
+          <div className="w-full max-w-[480px] shadow-2xl relative animate-in zoom-in-95 duration-300 bg-[var(--panel)] border border-[var(--border)] rounded-2xl p-6 text-[var(--text)]">
             <button 
-              className="absolute right-5 top-5 text-[var(--muted)] hover:text-white transition-colors hover:rotate-90 duration-200" 
+              className="absolute right-5 top-5 text-[var(--muted)] hover:text-[var(--text)] transition-colors hover:rotate-90 duration-200" 
               onClick={() => setIsModalOpen(false)}
             >
               ✕
             </button>
-            <h2 className="text-xl font-bold mb-6">Agregar movimiento</h2>
+            <h2 className="font-headline text-xl font-bold mb-6 text-[var(--text)]">Agregar movimiento</h2>
             <form className="grid gap-3 mt-4" onSubmit={handleAdd}>
               <label className="text-xs text-[var(--muted)]">
                 Tipo
@@ -156,7 +156,7 @@ export function Transactions() {
               </label>
               <button type="submit" className="btn-primary mt-4 py-3 text-lg">Guardar movimiento</button>
             </form>
-          </Card>
+          </div>
         </div>
       )}
     </div>

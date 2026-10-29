@@ -44,7 +44,7 @@ class LandingScreen extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(width: 8),
-                        const Text('MiPlata', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16)),
+                        const Text('Nova Plata', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16)),
                       ],
                     ),
                     Row(
@@ -101,7 +101,7 @@ class LandingScreen extends StatelessWidget {
                     ),
                     const SizedBox(height: 16),
                     const Text(
-                      'MiPlata es la plataforma financiera definitiva para gestionar tu presupuesto, rastrear gastos y planificar tu futuro con el poder de la Inteligencia Artificial.',
+                      'Nova Plata es la plataforma financiera definitiva para gestionar tu presupuesto, rastrear gastos y planificar tu futuro con el poder de la Inteligencia Artificial.',
                       style: TextStyle(fontSize: 14, color: AppColors.textGray400, height: 1.5),
                       textAlign: TextAlign.center,
                     ),
@@ -161,11 +161,11 @@ class LandingScreen extends StatelessWidget {
                     ),
                     const SizedBox(height: 32),
 
-                    // Feature 0 (What is MiPlata?)
+                    // Feature 0 (What is Nova Plata?)
                     _buildFeatureCard(
                       icon: LucideIcons.wallet,
                       iconColor: AppColors.accent,
-                      title: '¿Qué es MiPlata?',
+                      title: '¿Qué es Nova Plata?',
                       description: 'Es una aplicación móvil de gestión de finanzas personales que te permite llevar un control estricto de tus ingresos y gastos, establecer metas y visualizar reportes interactivos.',
                     ).animate().fade(duration: 400.ms).slideY(begin: 0.1),
 
@@ -238,7 +238,7 @@ class LandingScreen extends StatelessWidget {
                                 text: const TextSpan(
                                   style: TextStyle(color: AppColors.textGray200, fontSize: 11),
                                   children: [
-                                    TextSpan(text: 'Plata IA: ', style: TextStyle(color: AppColors.accent, fontWeight: FontWeight.bold)),
+                                    TextSpan(text: 'Nova IA: ', style: TextStyle(color: AppColors.accent, fontWeight: FontWeight.bold)),
                                     TextSpan(text: 'Detectamos \$42.000 de suscripciones inactivas este mes.'),
                                   ],
                                 ),
@@ -292,7 +292,7 @@ class LandingScreen extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(width: 8),
-                        const Text('MiPlata', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16)),
+                        const Text('Nova Plata', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16)),
                       ],
                     ),
                     const SizedBox(height: 16),
@@ -303,7 +303,7 @@ class LandingScreen extends StatelessWidget {
                     ),
                     const SizedBox(height: 32),
                     const Text(
-                      '© 2026 MiPlata. Todos los derechos reservados.\nDesarrollado por Maria Alejandra Velasquez\nVersión 1.0.1',
+                      '© 2026 Nova Plata. Todos los derechos reservados.\nVersión 1.0.1',
                       style: TextStyle(color: AppColors.textGray500, fontSize: 11, height: 1.5),
                       textAlign: TextAlign.center,
                     ),

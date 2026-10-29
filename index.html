@@ -1,12 +1,35 @@
 <!doctype html>
-<html lang="en">
+<html lang="es">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="manifest" href="/manifest.json" />
+    <meta name="theme-color" content="#FF334F" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>mi-plata</title>
+    <meta name="description" content="Nova Plata - Plataforma financiera definitiva para gestionar tu presupuesto, rastrear gastos y planificar tu futuro con el poder de Nova IA." />
+    <meta property="og:title" content="Nova Plata - Finanzas Inteligentes con Nova IA" />
+    <meta property="og:description" content="Controla tu dinero. Entiende tus hábitos. Construye tus metas con Nova Plata y Nova IA." />
+    <meta property="og:type" content="website" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <title>Nova Plata - Finanzas Inteligentes con Nova IA</title>
+    <script>
+      (function() {
+        try {
+          const auth = JSON.parse(localStorage.getItem('mi-plata-auth') || '{}');
+          const theme = auth?.state?.theme || 'dark';
+          const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+          if (theme === 'dark' || (theme === 'system' && prefersDark)) {
+            document.documentElement.classList.add('dark');
+          } else {
+            document.documentElement.classList.remove('dark');
+          }
+        } catch (e) {}
+      })();
+    </script>
   </head>
-  <body>
+  <body class="antialiased min-h-screen">
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>

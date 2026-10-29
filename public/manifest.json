@@ -1,0 +1,17 @@
+{
+  "short_name": "Nova Plata",
+  "name": "Nova Plata - Finanzas Inteligentes",
+  "description": "Plataforma financiera definitiva con el poder de Nova IA",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "type": "image/svg+xml",
+      "sizes": "any"
+    }
+  ],
+  "start_url": "/",
+  "background_color": "#090A0C",
+  "theme_color": "#FF334F",
+  "display": "standalone",
+  "orientation": "portrait"
+}

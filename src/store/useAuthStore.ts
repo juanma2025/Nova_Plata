@@ -17,7 +17,7 @@ export const useAuthStore = create<AuthState>()(
     (set) => ({
       user: null,
       isAuthenticated: false,
-      theme: 'system',
+      theme: 'dark',
       setTheme: (theme) => set({ theme }),
       login: (user) => set({ user, isAuthenticated: true }),
       logout: () => set({ user: null, isAuthenticated: false }),

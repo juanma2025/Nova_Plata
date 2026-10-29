@@ -1,11 +1,11 @@
 /**
- * Mock Gemini Service — simulates PLATA IA for demo/testing purposes.
+ * Mock Gemini Service — simulates Nova IA for demo/testing purposes.
  */
 import { logger } from '../utils/logger.js';
 import type { ChatInput } from '../schemas/gemini.schemas.js';
 
 const DEMO_RESPONSES: Record<string, string> = {
-  hola: '¡Hola! 👋 Soy PLATA IA, tu asistente financiero personal de MiPlata. ¿En qué puedo ayudarte hoy con tus finanzas? 💰',
+  hola: '¡Hola! 👋 Soy Nova IA, tu copiloto financiero inteligente de Nova Plata. ¿En qué puedo ayudarte hoy con tus finanzas? 💰',
   presupuesto: '📊 ¡Excelente pregunta sobre presupuestos! Te recomiendo la regla 50/30/20:\n\n• **50%** para necesidades (arriendo, servicios, mercado)\n• **30%** para deseos (entretenimiento, restaurantes)\n• **20%** para ahorro e inversión\n\n¿Quieres que te ayude a aplicar esta regla a tu situación?',
   ahorro: '💡 Aquí van algunos tips de ahorro efectivos:\n\n1. **Automatiza**: Programa transferencias automáticas el día de pago\n2. **Regla de 24h**: Antes de compras impulsivas, espera un día\n3. **Gastos hormiga**: Revisa suscripciones y cafés diarios\n4. **Meta visual**: Ten una imagen de tu meta como fondo de pantalla\n\n¿Sobre cuál quieres profundizar?',
   deuda: '🎯 Para manejar deudas, te sugiero el **método avalancha**:\n\n1. Paga el mínimo en todas las deudas\n2. Destina el extra a la deuda con mayor tasa de interés\n3. Al terminar esa, pasa al siguiente\n\nEsto minimiza el costo total de tus deudas. ¿Quieres analizar tu situación?',
@@ -31,5 +31,5 @@ export async function chat(input: ChatInput): Promise<string> {
   }
 
   // Default response
-  return `¡Gracias por tu pregunta! 🤔\n\nComo asistente financiero de MiPlata, puedo ayudarte con:\n\n• **Presupuestos** — Cómo organizar tus ingresos\n• **Ahorro** — Estrategias para ahorrar más\n• **Deudas** — Cómo salir de deudas eficientemente\n• **Inversión** — Primeros pasos para invertir\n\n¿Sobre cuál tema te gustaría saber más?\n\n_[Modo Demo — Conecta tu API Key de Gemini para respuestas personalizadas]_`;
+  return `¡Gracias por tu pregunta! 🤔\n\nComo asistente financiero de Nova Plata, puedo ayudarte con:\n\n• **Presupuestos** — Cómo organizar tus ingresos\n• **Ahorro** — Estrategias para ahorrar más\n• **Deudas** — Cómo salir de deudas eficientemente\n• **Inversión** — Primeros pasos para invertir\n\n¿Sobre cuál tema te gustaría saber más?\n\n_[Modo Demo — Conecta tu API Key de Gemini para respuestas personalizadas]_`;
 }

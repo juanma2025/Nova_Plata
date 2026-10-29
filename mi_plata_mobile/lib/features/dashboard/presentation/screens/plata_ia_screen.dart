@@ -17,7 +17,7 @@ class _PlataIaScreenState extends ConsumerState<PlataIaScreen> {
   final List<Map<String, String>> _messages = [
     {
       'sender': 'ai',
-      'text': '¡Hola! Soy Plata IA, tu asistente financiero personal.\n\n🚧 Actualmente me encuentro en proceso de desarrollo y entrenamiento. Pronto estaré disponible para ayudarte a organizar tu dinero y presupuesto. ¡Vuelve más tarde!',
+      'text': '¡Hola! Soy Nova IA, tu asistente financiero personal.\n\n🚧 Actualmente me encuentro en proceso de desarrollo y entrenamiento. Pronto estaré disponible para ayudarte a organizar tu dinero y presupuesto. ¡Vuelve más tarde!',
     }
   ];
   bool _isLoading = false;
@@ -89,7 +89,7 @@ class _PlataIaScreenState extends ConsumerState<PlataIaScreen> {
                 const Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('Plata IA', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: Colors.white)),
+                    Text('Nova IA', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: Colors.white)),
                     Text('Tu asistente financiero', style: TextStyle(fontSize: 12, color: AppColors.textGray400)),
                   ],
                 ),
@@ -175,7 +175,7 @@ class _PlataIaScreenState extends ConsumerState<PlataIaScreen> {
               child: Row(
                 children: [
                   SizedBox(width: 48), // Padding equivalent to avatar
-                  Text('Plata IA está pensando...', style: TextStyle(color: AppColors.textGray500, fontSize: 12, fontStyle: FontStyle.italic)),
+                  Text('Nova IA está pensando...', style: TextStyle(color: AppColors.textGray500, fontSize: 12, fontStyle: FontStyle.italic)),
                 ],
               ),
             ),

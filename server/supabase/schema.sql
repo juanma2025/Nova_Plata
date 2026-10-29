@@ -1,5 +1,5 @@
 -- ==============================================================================
--- MiPlata - Database Schema
+-- Nova Plata - Database Schema
 -- ==============================================================================
 
 -- Enable the uuid-ossp extension if not already enabled

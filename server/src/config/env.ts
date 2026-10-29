@@ -26,7 +26,11 @@ const envSchema = z.object({
   RATE_LIMIT_MAX_REQUESTS: z.coerce.number().default(100),
 
   // Demo Mode
-  DEMO_MODE: z.coerce.boolean().default(true),
+  DEMO_MODE: z.preprocess((val) => {
+    if (val === 'false' || val === false || val === '0') return false;
+    if (val === 'true' || val === true || val === '1') return true;
+    return false;
+  }, z.boolean()).default(false),
 });
 
 export type Env = z.infer<typeof envSchema>;

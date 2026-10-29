@@ -60,8 +60,8 @@ export function Login() {
   };
 
   return (
-    <div>
-      <h2 className="text-3xl font-bold mb-2">Iniciar sesión</h2>
+    <div className="font-sans">
+      <h2 className="font-headline text-3xl font-bold mb-2 text-[var(--text)]">Iniciar sesión</h2>
       <p className="text-[var(--muted)] mb-8">Ingresa tus credenciales para acceder a tu cuenta.</p>
 
       <form onSubmit={handleSubmit} className="flex flex-col gap-5">
@@ -82,22 +82,22 @@ export function Login() {
           />
           <div className="flex justify-between items-center px-1">
             <label className="flex items-center gap-2 text-sm text-[var(--muted)] cursor-pointer">
-              <input type="checkbox" className="accent-[var(--green)]" />
+              <input type="checkbox" className="accent-[#B83A43]" />
               Recordarme
             </label>
-            <button type="button" className="text-sm font-medium text-[var(--green)] hover:underline">
+            <Link to="/forgot-password" className="text-sm font-medium text-[#B83A43] dark:text-[#FFB8BE] hover:text-[#FF334F] hover:underline">
               ¿Olvidaste tu contraseña?
-            </button>
+            </Link>
           </div>
         </div>
         
-        <Button type="submit" className="w-full mt-2" isLoading={isLoading}>
+        <Button type="submit" variant="primary" className="w-full mt-2" isLoading={isLoading}>
           Entrar a mi cuenta
         </Button>
       </form>
 
       <p className="mt-8 text-center text-sm text-[var(--muted)]">
-        ¿No tienes una cuenta? <Link to="/register" className="text-[var(--green)] font-medium hover:underline">Regístrate gratis</Link>
+        ¿No tienes una cuenta? <Link to="/register" className="text-[#B83A43] dark:text-[#FFB8BE] hover:text-[#FF334F] font-medium hover:underline">Regístrate gratis</Link>
       </p>
     </div>
   );

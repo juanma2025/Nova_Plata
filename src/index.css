@@ -2,39 +2,83 @@
 @tailwind components;
 @tailwind utilities;
 
+@property --neon-angle {
+  syntax: '<angle>';
+  inherits: true;
+  initial-value: 0deg;
+}
+
+@keyframes neonStreamer {
+  0% {
+    --neon-angle: 0deg;
+  }
+  100% {
+    --neon-angle: 360deg;
+  }
+}
+
 @layer base {
+  /* LIGHT MODE: fondo gris cálido, tarjetas limpias blancas con bordes discretos y sombras suaves, rojo en acciones principales */
   :root {
-    --bg: #ffffff;
-    --panel: #f8fafc;
-    --panel2: #f1f5f9;
-    --border: #e2e8f0;
-    --text: #0f172a;
-    --muted: #64748b;
+    --bg: #F5F4F0;
+    --panel: #FFFFFF;
+    --panel2: #EAE8E2;
+    --panel3: #DFDCD4;
+    --border: #E0DDD5;
+    --border-subtle: #ECE9E1;
+    --text: #191A1D;
+    --muted: #73747B;
+    --primary: #B83A43;
+    --primary-soft: #FFB8BE;
+    --primary-dark: #7D1C24;
+    --secondary: #171717;
+    --tertiary: #FF334F;
+    --neutral: #0D0E11;
     --green: #10b981;
     --green2: #059669;
-    --red: #ef4444;
+    --red: #FF334F;
     --yellow: #f59e0b;
-    --track: #e2e8f0;
+    --track: #E2DFD7;
     --radius: 16px;
+    --card-shadow: 0 4px 20px -2px rgba(28, 25, 23, 0.05), 0 2px 6px -1px rgba(28, 25, 23, 0.03);
+    --card-shadow-hover: 0 10px 25px -3px rgba(28, 25, 23, 0.08), 0 4px 10px -2px rgba(28, 25, 23, 0.04);
   }
 
+  /* DARK MODE: fondo negro sólido, superficies en niveles de profundidad (grises muy oscuros sólidos), texto claro y contorno rojo neón */
   .dark {
-    --bg: #101211;
-    --panel: #171a18;
-    --panel2: #1d211f;
-    --border: #2b302d;
-    --text: #f2f4f2;
-    --muted: #929b95;
-    --green: #65d391;
-    --green2: #3ca96a;
-    --red: #ef7373;
-    --yellow: #e5c66d;
-    --track: #292e2b;
+    --bg: #090A0C;
+    --panel: #131417;
+    --panel2: #1A1B20;
+    --panel3: #22242B;
+    --border: #26282E;
+    --border-subtle: #1C1E23;
+    --text: #F3F4F6;
+    --muted: #8E929B;
+    --primary: #B83A43;
+    --primary-soft: #FFB8BE;
+    --primary-dark: #7D1C24;
+    --secondary: #171717;
+    --tertiary: #FF334F;
+    --neutral: #0D0E11;
+    --green: #4ade80;
+    --green2: #22c55e;
+    --red: #FF334F;
+    --yellow: #f59e0b;
+    --track: #202227;
+    --radius: 16px;
+    --card-shadow: 0 4px 24px rgba(0, 0, 0, 0.45);
+    --card-shadow-hover: 0 12px 32px rgba(0, 0, 0, 0.65);
   }
 
   body {
-    @apply bg-[var(--bg)] text-[var(--text)] antialiased min-h-screen transition-colors duration-300;
-    font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    @apply bg-[var(--bg)] text-[var(--text)] antialiased min-h-screen;
+    font-family: 'Geist', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    transition: background-color 0.35s cubic-bezier(0.16, 1, 0.3, 1), color 0.25s ease;
+  }
+
+  h1, h2, h3, h4, h5, h6, .headline, .font-headline {
+    font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    letter-spacing: -0.025em;
   }
 }
 
@@ -44,6 +88,245 @@
   ::-webkit-scrollbar-track { background: transparent; }
   ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
   ::-webkit-scrollbar-thumb:hover { background: var(--muted); }
+
+  /* Design System Buttons & Inputs */
+  .btn-primary {
+    @apply inline-flex items-center justify-center rounded-xl px-5 py-2.5 text-sm font-semibold tracking-tight active:scale-95 disabled:opacity-50 disabled:pointer-events-none select-none;
+    position: relative;
+    isolation: isolate;
+    transition: background-color 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease, transform 0.15s ease;
+  }
+  :root:not(.dark) .btn-primary {
+    background-color: #B83A43;
+    color: #FFFFFF;
+    border: 1px solid #A32E36;
+    box-shadow: 0 4px 14px rgba(184, 58, 67, 0.25);
+  }
+  :root:not(.dark) .btn-primary:hover {
+    background-color: #A32E36;
+    box-shadow: 0 6px 20px rgba(184, 58, 67, 0.35);
+  }
+  .dark .btn-primary {
+    background-color: #15161B;
+    color: #FFFFFF;
+    border: 1px solid rgba(255, 51, 79, 0.4);
+    box-shadow: 0 0 16px rgba(255, 51, 79, 0.22);
+  }
+  .dark .btn-primary:hover {
+    background-color: #21191D;
+    border-color: rgba(255, 51, 79, 0.7);
+    box-shadow: 0 0 24px rgba(255, 51, 79, 0.45);
+  }
+
+  .btn-crimson {
+    @apply inline-flex items-center justify-center rounded-xl px-5 py-2.5 text-sm font-semibold tracking-tight text-white active:scale-95 disabled:opacity-50 disabled:pointer-events-none select-none;
+    position: relative;
+    isolation: isolate;
+    transition: background-color 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease, transform 0.15s ease;
+  }
+  :root:not(.dark) .btn-crimson {
+    background-color: #B83A43;
+    border: 1px solid #A32E36;
+    box-shadow: 0 4px 14px rgba(184, 58, 67, 0.3);
+  }
+  :root:not(.dark) .btn-crimson:hover {
+    background-color: #A32E36;
+  }
+  .dark .btn-crimson {
+    background-color: #181113;
+    color: #FFFFFF;
+    border: 1px solid rgba(255, 51, 79, 0.45);
+    box-shadow: 0 0 16px rgba(255, 51, 79, 0.25);
+  }
+  .dark .btn-crimson:hover {
+    background-color: #241417;
+    box-shadow: 0 0 24px rgba(255, 51, 79, 0.45);
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center rounded-xl px-4 py-2 text-sm font-medium transition-all duration-200 active:scale-95 select-none;
+    background-color: var(--panel);
+    border: 1px solid var(--border);
+    color: var(--text);
+  }
+  .btn-secondary:hover {
+    background-color: var(--panel2);
+    border-color: var(--muted);
+  }
+
+  .btn-icon {
+    @apply w-10 h-10 rounded-xl grid place-items-center transition-all duration-200 select-none;
+    background-color: var(--panel);
+    border: 1px solid var(--border);
+    color: var(--muted);
+  }
+  .btn-icon:hover {
+    color: var(--text);
+    border-color: var(--muted);
+  }
+
+  .input-field {
+    @apply rounded-xl px-4 py-2.5 text-sm outline-none transition-all duration-200;
+    background-color: var(--panel);
+    border: 1px solid var(--border);
+    color: var(--text);
+  }
+  .input-field:focus {
+    border-color: #B83A43;
+    box-shadow: 0 0 0 2px rgba(184, 58, 67, 0.2);
+  }
+  .input-field::placeholder {
+    color: var(--muted);
+  }
+
+  /* -------------------------------------------------------------
+     4. BORDE NEÓN ANIMADO TIPO "STREAMER"
+     - Conic-gradient enmascarado sobre el borde (mask-composite: exclude)
+     - Animación suave de luz roja neón (#FF334F) recorriendo el perímetro
+     - Modo oscuro: continuo y elegante (4-8s)
+     - Modo claro: sutil y discreto, con acento al hover o activo
+     - Prefers-reduced-motion: borde estático
+  ------------------------------------------------------------- */
+  /* -------------------------------------------------------------
+     4. BORDE NEÓN ANIMADO TIPO "STREAMER"
+     - Conic-gradient enmascarado sobre el borde (mask-composite: exclude)
+     - Animación suave de luz roja neón (#FF334F) recorriendo el perímetro
+     - Modo oscuro: continuo y elegante (4-8s)
+     - Modo claro: sutil y discreto, con acento al hover o activo
+     - Prefers-reduced-motion: borde estático
+  ------------------------------------------------------------- */
+  .neon-border {
+    position: relative;
+    isolation: isolate;
+    border-radius: var(--radius, 16px);
+    background-color: var(--panel);
+    border: 1px solid var(--border);
+    box-shadow: var(--card-shadow);
+    transition: background-color 0.35s ease, border-color 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
+  }
+
+  .neon-btn {
+    position: relative;
+    isolation: isolate;
+    border-radius: 12px;
+    transition: background-color 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease, transform 0.15s ease;
+  }
+
+  /* Animación del streamer idéntica para cards y botones */
+  .neon-border::before,
+  .neon-btn::before,
+  .btn-primary::before,
+  .btn-crimson::before {
+    content: '';
+    position: absolute;
+    inset: -1.5px;
+    border-radius: inherit;
+    padding: 1.5px;
+    background: conic-gradient(
+      from var(--neon-angle, 0deg),
+      transparent 0%,
+      transparent 55%,
+      rgba(255, 51, 79, 0.25) 72%,
+      rgba(255, 51, 79, 0.75) 86%,
+      #FF334F 95%,
+      rgba(255, 51, 79, 0.75) 98%,
+      transparent 100%
+    );
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask-composite: exclude;
+    pointer-events: none;
+    animation: neonStreamer var(--neon-duration, 5s) linear infinite;
+    animation-delay: var(--neon-delay, 0s);
+    opacity: 0.95;
+    z-index: 1;
+    transition: opacity 0.3s ease;
+  }
+
+  /* Modo oscuro: borde base y brillo */
+  .dark .neon-border {
+    border-color: rgba(255, 51, 79, 0.22);
+  }
+
+  .dark .neon-btn,
+  .dark .btn-primary,
+  .dark .btn-crimson {
+    background-color: #15161B;
+    color: #FFFFFF;
+    border: 1px solid rgba(255, 51, 79, 0.35);
+    box-shadow: 0 0 16px rgba(255, 51, 79, 0.22);
+  }
+  .dark .neon-btn:hover,
+  .dark .btn-primary:hover,
+  .dark .btn-crimson:hover {
+    background-color: #21191D;
+    border-color: rgba(255, 51, 79, 0.7);
+    box-shadow: 0 0 24px rgba(255, 51, 79, 0.45);
+  }
+
+  /* Modo claro: tarjetas limpias con bordes discretos y sombras suaves */
+  :root:not(.dark) .neon-border {
+    border: 1px solid var(--border);
+    background-color: var(--panel);
+    box-shadow: var(--card-shadow);
+  }
+  :root:not(.dark) .neon-border::before {
+    display: none;
+  }
+
+
+  :root:not(.dark) .neon-btn,
+  :root:not(.dark) .btn-primary,
+  :root:not(.dark) .btn-crimson {
+    background-color: #B83A43;
+    color: #FFFFFF;
+    border: 1px solid #A32E36;
+    box-shadow: 0 4px 14px rgba(184, 58, 67, 0.25);
+  }
+  :root:not(.dark) .neon-btn:hover,
+  :root:not(.dark) .btn-primary:hover,
+  :root:not(.dark) .btn-crimson:hover {
+    background-color: #A32E36;
+    box-shadow: 0 6px 20px rgba(184, 58, 67, 0.35);
+  }
+  :root:not(.dark) .neon-btn::before,
+  :root:not(.dark) .btn-primary::before,
+  :root:not(.dark) .btn-crimson::before {
+    opacity: 0.35;
+    background: conic-gradient(
+      from var(--neon-angle, 0deg),
+      transparent 0%,
+      transparent 65%,
+      rgba(184, 58, 67, 0.25) 80%,
+      #B83A43 95%,
+      transparent 100%
+    );
+  }
+  :root:not(.dark) .neon-btn:hover::before,
+  :root:not(.dark) .btn-primary:hover::before,
+  :root:not(.dark) .btn-crimson:hover::before {
+    opacity: 0.9;
+  }
+
+  /* Desfase de animación escalonada */
+  .neon-stagger-0 { --neon-delay: 0s; --neon-duration: 5s; }
+  .neon-stagger-1 { --neon-delay: -1.2s; --neon-duration: 5.6s; }
+  .neon-stagger-2 { --neon-delay: -2.5s; --neon-duration: 6s; }
+  .neon-stagger-3 { --neon-delay: -3.8s; --neon-duration: 5.2s; }
+  .neon-stagger-4 { --neon-delay: -1.8s; --neon-duration: 6.4s; }
+
+  /* Accesibilidad: respeta prefers-reduced-motion con borde estático */
+  @media (prefers-reduced-motion: reduce) {
+    .neon-border::before,
+    .neon-btn::before,
+    .btn-primary::before,
+    .btn-crimson::before {
+      animation: none !important;
+      background: #FF334F !important;
+      opacity: 0.4 !important;
+    }
+  }
 }
 
 /* Utils */

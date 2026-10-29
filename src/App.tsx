@@ -12,6 +12,8 @@ import { Goals } from './pages/Goals';
 import { Analytics } from './pages/Analytics';
 import { AI } from './pages/AI';
 import { Profile } from './pages/Profile';
+import { ForgotPassword } from './pages/ForgotPassword';
+import { ResetPassword } from './pages/ResetPassword';
 import { Onboarding } from './pages/app/Onboarding';
 import { Toaster } from 'sonner';
 import { useAuthStore } from './store/useAuthStore';
@@ -22,13 +24,23 @@ function AppRoot() {
   
   useEffect(() => {
     const root = window.document.documentElement;
-    root.classList.remove('light', 'dark');
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+
+    const applyTheme = () => {
+      root.classList.remove('light', 'dark');
+      if (theme === 'system') {
+        const systemTheme = mediaQuery.matches ? 'dark' : 'light';
+        root.classList.add(systemTheme);
+      } else {
+        root.classList.add(theme);
+      }
+    };
+
+    applyTheme();
 
     if (theme === 'system') {
-      const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-      root.classList.add(systemTheme);
-    } else {
-      root.classList.add(theme);
+      mediaQuery.addEventListener('change', applyTheme);
+      return () => mediaQuery.removeEventListener('change', applyTheme);
     }
   }, [theme]);
 
@@ -44,6 +56,8 @@ function AppRoot() {
         <Route element={<AuthLayout />}>
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
         </Route>
 
         {/* Onboarding Route (Protected but isolated) */}
@@ -56,7 +70,8 @@ function AppRoot() {
           <Route path="presupuesto" element={<Budget />} />
           <Route path="metas" element={<Goals />} />
           <Route path="estadisticas" element={<Analytics />} />
-          <Route path="plata-ia" element={<AI />} />
+          <Route path="nova-ia" element={<AI />} />
+          <Route path="plata-ia" element={<Navigate to="/app/nova-ia" replace />} />
           <Route path="perfil" element={<Profile />} />
         </Route>
         

@@ -28,7 +28,7 @@ export async function requireAuth(req: Request, res: Response, next: NextFunctio
       // In demo mode, accept any token and create a mock user
       (req as AuthenticatedRequest).user = {
         id: '00000000-0000-0000-0000-000000000001',
-        email: 'demo@miplata.com',
+        email: 'demo@novaplata.com',
         user_metadata: { name: 'Usuario Demo' },
         app_metadata: {},
         aud: 'authenticated',
@@ -56,6 +56,26 @@ export async function requireAuth(req: Request, res: Response, next: NextFunctio
   } catch (err) {
     logger.error('Auth middleware error', { error: (err as Error).message });
     sendError(res, 'Error de autenticación', 500);
+  }
+}
+
+export async function optionalAuth(req: Request, _res: Response, next: NextFunction) {
+  try {
+    const authHeader = req.headers.authorization;
+    if (authHeader && authHeader.startsWith('Bearer ')) {
+      const token = authHeader.split(' ')[1];
+      if (token) {
+        (req as AuthenticatedRequest).accessToken = token;
+        const { supabaseAdmin } = await import('../config/supabase.js');
+        const { data } = await supabaseAdmin.auth.getUser(token);
+        if (data?.user) {
+          (req as AuthenticatedRequest).user = data.user;
+        }
+      }
+    }
+    next();
+  } catch {
+    next();
   }
 }
 

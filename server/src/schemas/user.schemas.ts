@@ -2,9 +2,24 @@ import { z } from 'zod';
 
 export const updateProfileSchema = z.object({
   body: z.object({
-    full_name: z.string().min(2).max(100).trim().optional(),
-    avatar_url: z.string().url().max(500).optional(),
-  }),
+    full_name: z.string().trim().optional(),
+    name: z.string().trim().optional(),
+    avatar_url: z.string().optional(),
+    phone: z.string().optional(),
+    phone_prefix: z.string().optional(),
+    document_id: z.string().optional(),
+    occupation: z.string().optional(),
+    currency: z.string().optional(),
+    tax_regime: z.string().optional(),
+    anomaly_alert_threshold: z.number().optional(),
+    ai_copilot_proactive: z.boolean().optional(),
+    ai_weekly_audit: z.boolean().optional(),
+    ai_subscription_detection: z.boolean().optional(),
+    ai_risk_profile: z.string().optional(),
+    monthly_income: z.number().optional(),
+    monthly_budget: z.number().optional(),
+    savings_goal: z.number().optional(),
+  }).passthrough(),
 });
 
 export const onboardingSchema = z.object({

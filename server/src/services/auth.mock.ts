@@ -29,15 +29,18 @@ const demoUsers = new Map<string, {
 
 // Seed a demo user
 const demoUserId = '00000000-0000-0000-0000-000000000001';
-demoUsers.set('demo@miplata.com', {
+const demoUserData = {
   id: demoUserId,
-  email: 'demo@miplata.com',
+  email: 'demo@novaplata.com',
   password: 'Demo1234',
   name: 'Usuario Demo',
   email_confirmed: true,
   created_at: new Date().toISOString(),
   mfaFactors: [],
-});
+};
+demoUsers.set('demo@novaplata.com', demoUserData);
+demoUsers.set('demo@miplata.com', demoUserData); // Fallback alias
+
 
 function generateToken(): string {
   return `demo_token_${randomUUID()}`;
@@ -104,11 +107,20 @@ export async function logout(_accessToken: string) {
   logger.info('Mock Auth: User logged out');
 }
 
-export async function forgotPassword(_input: ForgotPasswordInput) {
-  logger.info('Mock Auth: Password reset requested');
+export async function forgotPassword(input: ForgotPasswordInput) {
+  logger.info('Mock Auth: Password reset requested', { email: input.email });
 }
 
-export async function resetPassword(_input: ResetPasswordInput, _accessToken: string) {
+export async function resetPassword(input: ResetPasswordInput & { email?: string }, _accessToken?: string) {
+  if (input.email && demoUsers.has(input.email)) {
+    const user = demoUsers.get(input.email)!;
+    user.password = input.password;
+    demoUsers.set(input.email, user);
+    logger.info('Mock Auth: Password updated for user', { email: input.email });
+    return;
+  }
+  const defaultDemo = demoUsers.get('demo@novaplata.com');
+  if (defaultDemo) defaultDemo.password = input.password;
   logger.info('Mock Auth: Password reset successful');
 }
 
@@ -132,7 +144,7 @@ export async function mfaEnroll(_accessToken: string, input: MfaEnrollInput) {
     totp: {
       qr_code: 'data:image/png;base64,DEMO_QR_CODE',
       secret: 'DEMO_SECRET_BASE32',
-      uri: `otpauth://totp/MiPlata:demo@miplata.com?secret=DEMO_SECRET_BASE32&issuer=MiPlata`,
+      uri: `otpauth://totp/NovaPlata:demo@novaplata.com?secret=DEMO_SECRET_BASE32&issuer=NovaPlata`,
     },
   };
 }

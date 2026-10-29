@@ -20,19 +20,28 @@ export function PublicNavbar() {
           </Link>
           <nav className='hidden md:flex gap-6 text-sm font-medium'>
             <a href='#features' className='text-[var(--muted)] hover:text-[var(--text)] transition-colors'>Características</a>
-            <a href='#ia' className='text-[var(--muted)] hover:text-[var(--text)] transition-colors'>PLATA IA</a>
+            <a href='#ia' className='text-[var(--muted)] hover:text-[var(--text)] transition-colors'>Nova IA</a>
           </nav>
         </div>
         <div className='flex items-center gap-3'>
-          <button onClick={toggleTheme} className='p-2 rounded-lg hover:bg-[var(--panel2)] transition-colors text-[var(--muted)]'>
-            {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
+          <button 
+            onClick={toggleTheme} 
+            className='p-2 rounded-xl hover:bg-[var(--panel2)] transition-colors text-[var(--muted)] hover:text-[var(--text)]'
+            title={theme === 'dark' ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'}
+            aria-label="Cambiar tema"
+          >
+            {theme === 'dark' ? (
+              <Sun size={18} className="text-amber-400 transition-transform hover:rotate-45" />
+            ) : (
+              <Moon size={18} className="text-[#B83A43] transition-transform hover:-rotate-12" />
+            )}
           </button>
           {isAuthenticated ? (
-            <Link to='/app'><Button>Ir a mi panel</Button></Link>
+            <Link to='/app'><Button variant="primary" neon={true}>Ir a mi panel</Button></Link>
           ) : (
             <>
               <Link to='/login'><Button variant='ghost'>Iniciar sesión</Button></Link>
-              <Link to='/register'><Button>Crear cuenta</Button></Link>
+              <Link to='/register'><Button variant="primary" neon={true}>Crear cuenta</Button></Link>
             </>
           )}
         </div>

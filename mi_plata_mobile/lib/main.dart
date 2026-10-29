@@ -12,20 +12,20 @@ void main() async {
   
   runApp(
     const ProviderScope(
-      child: MiPlataApp(),
+      child: NovaPlataApp(),
     ),
   );
 }
 
-class MiPlataApp extends ConsumerWidget {
-  const MiPlataApp({super.key});
+class NovaPlataApp extends ConsumerWidget {
+  const NovaPlataApp({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final router = ref.watch(routerProvider);
 
     return MaterialApp.router(
-      title: 'Mi Plata',
+      title: 'Nova Plata',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
