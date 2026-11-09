@@ -70,8 +70,8 @@ export function AI() {
     try {
       // Build history for backend
       const history = messages.slice(1).map(m => ({
-        role: m.sender === 'user' ? 'user' : 'model',
-        parts: [{ text: m.text }]
+        role: (m.sender === 'user' ? 'user' : 'assistant') as 'user' | 'assistant',
+        content: m.text,
       }));
 
       const res = await authService.post('/chat', { message: text, history });

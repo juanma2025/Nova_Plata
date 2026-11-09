@@ -1,19 +1,10 @@
 import type { Request, Response } from 'express';
-import dotenv from 'dotenv';
-import { env } from '../config/env.js';
+import { isGeminiConfigured } from '../config/gemini.js';
+import type { AuthenticatedRequest } from '../types/index.js';
 import { sendSuccess, sendError } from '../utils/apiResponse.js';
 
-dotenv.config();
-
 async function getGeminiService() {
-  dotenv.config();
-  const apiKey = process.env.GEMINI_API_KEY || env.GEMINI_API_KEY;
-  const isRealKey = apiKey && 
-    apiKey !== 'demo-gemini-key' && 
-    apiKey !== 'your-gemini-api-key-here' &&
-    !apiKey.includes('your-gemini');
-
-  if (isRealKey) {
+  if (isGeminiConfigured()) {
     return import('../services/gemini.service.js');
   }
   return import('../services/gemini.mock.js');
@@ -22,9 +13,10 @@ async function getGeminiService() {
 // ─── POST /chat ─────────────────────────────────────
 export async function chat(req: Request, res: Response) {
   try {
+    const authReq = req as AuthenticatedRequest;
     const geminiService = await getGeminiService();
     try {
-      const reply = await geminiService.chat(req.body);
+      const reply = await geminiService.chat(req.body, authReq.user, authReq.accessToken);
       sendSuccess(res, { reply }, 'Respuesta generada');
     } catch (apiErr) {
       console.warn('Real Gemini API call failed, using fallback:', apiErr);

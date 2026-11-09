@@ -12,7 +12,7 @@ const DEMO_RESPONSES: Record<string, string> = {
   inversión: '📈 Para empezar a invertir:\n\n1. **Fondo de emergencia primero** (3-6 meses de gastos)\n2. **CDTs** para principiantes (bajo riesgo)\n3. **Fondos de inversión** cuando tengas más experiencia\n4. **Nunca inviertas dinero que necesitas a corto plazo**\n\n⚠️ Recuerda: no soy asesor de inversiones certificado. Consulta siempre con un profesional.',
 };
 
-export async function chat(input: ChatInput): Promise<string> {
+export async function chat(input: ChatInput, _user?: unknown, _accessToken?: string): Promise<string> {
   logger.info('Mock Gemini: Chat request received', {
     inputLength: input.message.length,
     historyLength: input.history.length,

@@ -1,18 +1,10 @@
-import { GoogleGenAI } from '@google/genai';
-import dotenv from 'dotenv';
-import { env } from '../config/env.js';
+import type { User } from '@supabase/supabase-js';
+import { CHAT_MODEL, getGenAI } from '../config/gemini.js';
 import { logger } from '../utils/logger.js';
 import type { ChatInput } from '../schemas/gemini.schemas.js';
+import { buildFinancialSnapshot } from './aiContext.service.js';
 
-dotenv.config();
-
-function getGenAI() {
-  dotenv.config();
-  const apiKey = process.env.GEMINI_API_KEY || env.GEMINI_API_KEY;
-  return new GoogleGenAI({ apiKey });
-}
-
-const MODEL = 'gemini-2.5-flash';
+const MODEL = CHAT_MODEL;
 
 /**
  * System prompt that defines Nova IA's behavior.
@@ -41,14 +33,24 @@ Reglas estrictas:
 Si el usuario intenta hacer algo malicioso o fuera de tu alcance, responde:
 "Lo siento, eso está fuera de mis capacidades como asistente financiero. ¿Puedo ayudarte con algo relacionado con tus finanzas personales?"`;
 
-export async function chat(input: ChatInput): Promise<string> {
+export async function chat(input: ChatInput, user?: User, accessToken?: string): Promise<string> {
   try {
     const genai = getGenAI();
+    let systemInstruction = SYSTEM_PROMPT;
+
+    if (user && accessToken) {
+      try {
+        const snapshot = await buildFinancialSnapshot(user, accessToken);
+        systemInstruction = `${SYSTEM_PROMPT}\n\n# Contexto financiero real del usuario autenticado\nUsa estas cifras reales para responder con precisión (no inventes datos):\n${snapshot.text}`;
+      } catch (ctxErr) {
+        logger.warn('Gemini: Could not build financial snapshot, using base prompt', {
+          error: (ctxErr as Error).message,
+        });
+      }
+    }
+
     // Build the conversation history for Gemini
     const contents = [
-      // System instruction as the first user turn
-      { role: 'user' as const, parts: [{ text: SYSTEM_PROMPT }] },
-      { role: 'model' as const, parts: [{ text: '¡Hola! Soy Nova IA, tu copiloto financiero inteligente. ¿En qué puedo ayudarte hoy? 💰' }] },
       // Add conversation history
       ...input.history.map((msg) => ({
         role: (msg.role === 'user' ? 'user' : 'model') as 'user' | 'model',
@@ -62,8 +64,9 @@ export async function chat(input: ChatInput): Promise<string> {
       model: MODEL,
       contents,
       config: {
+        systemInstruction,
         maxOutputTokens: 1024,
-        temperature: 0.7,
+        temperature: 0.4,
         topP: 0.9,
       },
     });
