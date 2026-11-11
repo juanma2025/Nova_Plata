@@ -1,7 +1,7 @@
 <div align="center">
 
 # ✦ NOVA PLATA
-### Plataforma Inteligente de Finanzas Personales & Copiloto con Machine Learning (`Mi_Plata2`)
+### Plataforma Inteligente de Finanzas Personales & Copiloto con Machine Learning 
 
 [![React](https://img.shields.io/badge/React-19.2-61DAFB?style=for-the-badge&logo=react&logoColor=black)](https://react.dev/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-6.0-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
